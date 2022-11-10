@@ -1,0 +1,35 @@
+% SIMPLE DERIVATIVE
+Data = readmatrix("Data_nextGen_KEtesting_allresults.csv",'NumHeaderLines',4);
+conc = Data(1:500,2);
+time = Data(1:500,1);
+
+% POLYNOMIAL MODEL
+coeffs = polyfit(time,conc,4);
+model = (coeffs(1).*time.^4) + (coeffs(2).*time.^3) + (coeffs(3).*time.^2) + (coeffs(4).*time) + coeffs(5);
+
+lin_model = coeffs(4).*time;
+
+figure(1)
+plot(time,model,'b-');
+hold on
+plot(time,lin_model,'r--');
+ylim([0,4])
+hold off
+
+figure(2)
+plot(time,conc,'r-');
+hold on
+plot(time,model,'b-');
+ylim([0,4])
+hold off
+
+disp(coeffs(4))
+
+
+
+sse_pol = ( sum(model - conc).^2);
+sst_pol = (sum(((conc - mean(conc)).^2)));
+r_sq = 1 - (sse_pol/sst_pol);
+fprintf('R2 = %.5f',r_sq);
+
+
